@@ -13,9 +13,9 @@ vectorize_layer = tf.keras.layers.TextVectorization(
 model = tf.keras.Sequential([
     tf.keras.Input(shape=(1,), dtype=tf.string),
     vectorize_layer,
-    tf.keras.layers.Embedding(max_vocabulary + 1, 16),
+    tf.keras.layers.Embedding(max_vocabulary + 1, 20),
     tf.keras.layers.GlobalAveragePooling1D(),
-    tf.keras.layers.Dense(20, activation="relu"),
+    tf.keras.layers.Dense(24, activation="relu"),
     tf.keras.layers.Dense(1, activation="sigmoid")])
 
 model.compile(loss='binary_crossentropy',
@@ -29,7 +29,6 @@ train_target = data_set.iloc[:,2:]
 train_target = pd.DataFrame(data=list(map(lambda arr: 1 if 1 in arr else 0, train_target.values)))
 
 model_history = model.fit(train_data, train_target, epochs=5, validation_split=0.2)
-print(model_history)
 model.save('models/model.h5')
 
 test_data = pd.read_csv("res/test.csv")["comment_text"].to_list()

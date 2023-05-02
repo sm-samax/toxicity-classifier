@@ -2,7 +2,7 @@ import pandas as pd
 import tensorflow as tf
 import test as t
 
-max_vocabulary = 10000
+max_vocabulary = 7500
 
 vectorize_layer = tf.keras.layers.TextVectorization(
     vocabulary=("res/bad-words.csv"),
@@ -13,9 +13,10 @@ vectorize_layer = tf.keras.layers.TextVectorization(
 model = tf.keras.Sequential([
     tf.keras.Input(shape=(1,), dtype=tf.string),
     vectorize_layer,
-    tf.keras.layers.Embedding(max_vocabulary + 1, 20),
+    tf.keras.layers.Embedding(max_vocabulary + 1, 16),
     tf.keras.layers.GlobalAveragePooling1D(),
-    tf.keras.layers.Dense(24, activation="relu"),
+    tf.keras.layers.Dropout(.2),
+    tf.keras.layers.Dense(20, activation="relu"),
     tf.keras.layers.Dense(1, activation="sigmoid")])
 
 model.compile(loss='binary_crossentropy',
